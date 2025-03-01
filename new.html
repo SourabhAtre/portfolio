@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading Animation</title>
+    <style>
+        .loading-container {
+            width: 100%;
+            text-align: center;
+            opacity: 1;
+            transition: opacity 0.5s ease-out;
+            position: absolute;
+            height: 100%;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #111;
+        }
+
+        .hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-bar {
+            width: 80%;
+            height: 10px;
+            background: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 10px;
+            position: relative;
+        }
+
+        .loading-bar-fill {
+            height: 100%;
+            width: 0;
+            background: #ffb400;
+            transition: width 0.03s;
+            animation: fillBar 3s ease-in-out forwards;
+            border-radius: 10px 0 0 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="loading-container">
+    <div class="loading-bar">
+        <div class="loading-bar-fill"></div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const loadingContainer = document.querySelector('.loading-container');
+        const progressBarFill = document.querySelector('.loading-bar-fill');
+        const progressText = document.querySelector('.loading-text');
+
+        let progress = 0;
+        const duration = 3000; // 3 seconds
+        const interval = 30; // Update every 30ms
+        const increment = 100 / (duration / interval);
+
+        const loadingInterval = setInterval(() => {
+            progress += increment;
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(loadingInterval);
+
+                // Start fade-out animation after completion
+                setTimeout(() => {
+                    loadingContainer.classList.add('hidden');
+                }, 100); // Small delay to ensure 100% is displayed briefly
+            }
+            progressBarFill.style.width = `${progress}%`;
+            progressText.textContent = `${Math.floor(progress)}%`;
+        }, interval);
+    });
+</script>
+
+</body>
+</html>
